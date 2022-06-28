@@ -197,7 +197,10 @@ if __name__ == "__main__":
         print("This only works on Windows systems for now")
         sys.exit(1)
     banner = "\n\t\t\t𝕮𝖆𝖒𝖔𝖚𝖋𝖑𝖆𝖌𝖊 ρутнση мєтєяρяєтєя ¢яуρтєя\n"
-    print(banner)
+    try:
+        print(banner)
+    except:
+        print("\n\t\t\tCamouflage python meterpreter crypter\n")
     parser = argparse.ArgumentParser(description='Encryptor for the python stageless meterpreter version',
         formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('-p','--payload', type=str, help="Meterpreter connection type.", choices=['http', 'https', 'tcp'], default='http')
